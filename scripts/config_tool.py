@@ -6,6 +6,14 @@ from pathlib import Path
 
 CONFIG_PATH = Path("/root/scripts/tg_migrator/config.py")
 
+ALLOWED_SET_KEYS = {
+    "OLD_CHANNEL_ID",
+    "OLD_GROUP_ID",
+    "NEW_GROUP_ID",
+    "CHANNEL_TOPIC_ID",
+    "GROUP_TOPIC_ID",
+}
+
 
 def load_config_text():
     if not CONFIG_PATH.exists():
@@ -81,6 +89,35 @@ def remove_bot(username):
     print(f"Removed ignored bot: @{username}")
 
 
+def set_value(key, value):
+    if key not in ALLOWED_SET_KEYS:
+        allowed = ", ".join(sorted(ALLOWED_SET_KEYS))
+        raise SystemExit(f"Unsupported key: {key}. Allowed: {allowed}")
+
+    try:
+        int_value = int(value)
+    except ValueError:
+        raise SystemExit(f"Value must be integer: {value}")
+
+    text = load_config_text()
+    lines = text.splitlines()
+    out = []
+    changed = False
+
+    for line in lines:
+        if line.startswith(f"{key} ="):
+            out.append(f"{key} = {int_value}")
+            changed = True
+        else:
+            out.append(line)
+
+    if not changed:
+        raise SystemExit(f"Key not found in config.py: {key}")
+
+    save_config_text("\n".join(out) + "\n")
+    print(f"Updated {key} = {int_value}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Manage tg-migr-copier config")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -93,6 +130,10 @@ def main():
     remove = sub.add_parser("remove-bot")
     remove.add_argument("username")
 
+    set_cmd = sub.add_parser("set")
+    set_cmd.add_argument("key")
+    set_cmd.add_argument("value")
+
     args = parser.parse_args()
 
     if args.command == "show":
@@ -101,6 +142,8 @@ def main():
         add_bot(args.username)
     elif args.command == "remove-bot":
         remove_bot(args.username)
+    elif args.command == "set":
+        set_value(args.key, args.value)
 
 
 if __name__ == "__main__":
