@@ -40,7 +40,6 @@ and update:
 - WorkingDirectory
 - ExecStart
 
-
 ## Configuration
 
 Copy:
@@ -61,6 +60,33 @@ and fill real values:
 - ignored bot usernames
 
 config.py is intentionally excluded from Git.
+
+## Config Tool
+
+The project includes an interactive configuration utility:
+
+python config_tool.py
+
+Features:
+
+- show current configuration;
+- validate configuration;
+- set channel/group IDs;
+- set forum topic IDs;
+- add ignored bot usernames;
+- remove ignored bot usernames.
+
+Command line mode:
+
+python config_tool.py show
+
+python config_tool.py validate
+
+python config_tool.py set GROUP_TOPIC_ID 4
+
+python config_tool.py add-bot example_bot
+
+python config_tool.py remove-bot example_bot
 
 ## Installation
 
