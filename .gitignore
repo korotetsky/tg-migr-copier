@@ -1,0 +1,31 @@
+# Secrets
+config.py
+
+# Telegram sessions
+*.session
+*.session-journal
+
+# Runtime state
+mirror_state.json
+progress_channel.json
+progress_group.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editors
+*.swp
+*.swo
+
+# Logs
+*.log

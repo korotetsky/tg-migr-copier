@@ -1,0 +1,15 @@
+[Unit]
+Description=Telegram group shadow mirror
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/scripts/tg_migrator
+ExecStart=/root/scripts/tg_migrator/venv/bin/python /root/scripts/tg_migrator/mirror_group.py
+Restart=always
+RestartSec=10
+User=root
+
+[Install]
+WantedBy=multi-user.target
